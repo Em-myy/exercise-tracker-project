@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exercise Tracker</title>
+  </head>
+  <body>
+    <h1>Exercise Tracker</h1>
+
+    <main>
+      <section>
+        <form id="userForm">
+          <fieldset>
+            <input
+              type="text"
+              placeholder="username"
+              id="first-form"
+              name="username"
+            />
+            <button type="submit">Submit</button>
+          </fieldset>
+        </form>
+      </section>
+
+      <section>
+        <form id="exerciseForm">
+          <fieldset>
+            <input
+              type="text"
+              placeholder=":_id"
+              id="second-form"
+              name=":_id"
+            />
+            <input
+              type="text"
+              placeholder="description"
+              id="third-form"
+              name="description"
+            />
+            <input
+              type="text"
+              placeholder="duration"
+              id="fourth-form"
+              name="duration"
+            />
+            <input
+              type="text"
+              placeholder="date (yyyy-mm-dd)"
+              id="fifth-form"
+              name="date"
+            />
+            <button type="submit">Submit</button>
+          </fieldset>
+        </form>
+      </section>
+    </main>
+  </body>
+  <script>
+    let currentUserId;
+    document
+      .getElementById("userForm")
+      .addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        const res = await fetch("/api/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        const user = await res.json();
+        currentUserId = user._id;
+        window.location.href = `/api/users/${currentUserId}`;
+      });
+
+    document
+      .getElementById("exerciseForm")
+      .addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        const res = await fetch(`/api/users/${currentUserId}/exercises`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        const exercise = await res.json();
+        window.location.href = `/api/users/${currentUserId}/exercises`;
+      });
+  </script>
+</html>
