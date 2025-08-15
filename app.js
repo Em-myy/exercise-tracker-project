@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const cors = require("cors");
 
 const app = express();
 const Schema = mongoose.Schema;
@@ -36,6 +37,7 @@ absoluteHtmlPath = __dirname + "/views/index.html";
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cors({ optionsSuccessStatus: 200 }));
 
 app.get("/", (req, res) => {
   res.sendFile(absoluteHtmlPath);
